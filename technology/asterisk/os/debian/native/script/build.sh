@@ -137,8 +137,9 @@ function install_asterisk_from_source () {
     cd $(ls | grep -v "tar.gz" | grep "asterisk" | grep [0-9])
     # install package dependencies
     echo "libvpb1	libvpb1/countrycode	string	$itu_country_code" | debconf-set-selections
-    export DEBIAN_FRONTEND=noninteractive
+    #export DEBIAN_FRONTEND=noninteractive
     contrib/scripts/install_prereq install
+    #unset DEBIAN_FRONTEND
     # checks on the operating system, and get the Asterisk code ready to compile on this particular server
     ./configure
 
