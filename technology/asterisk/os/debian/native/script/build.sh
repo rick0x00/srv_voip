@@ -28,6 +28,8 @@ os_version=("11" "bullseye")
 
 asterisk_version="16"
 
+itu_country_code="55"
+
 sip_port[0]="5060" # SIP number Port
 sip_port[1]="udp" # SIP protocol Port
 
@@ -134,6 +136,8 @@ function install_asterisk_from_source () {
     cd /usr/local/src/
     cd $(ls | grep -v "tar.gz" | grep "asterisk" | grep [0-9])
     # install package dependencies
+    echo "libvpb1	libvpb1/countrycode	string	$itu_country_code" | debconf-set-selections
+    export DEBIAN_FRONTEND=noninteractive
     contrib/scripts/install_prereq install
     # checks on the operating system, and get the Asterisk code ready to compile on this particular server
     ./configure
