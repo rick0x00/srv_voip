@@ -168,7 +168,7 @@ function install_asterisk_from_source () {
 }
 
 function install_asterisk_from_apt () {
-    apt install -y asterisk
+    apt install -y asterisk asterisk-config asterisk-modules asterisk-doc asterisk-core-sounds-en-gsm asterisk-mobile asterisk-opus asterisk-moh-opsound-gsm asterisk-mp3
 }
 
 function install_asterisk () {
