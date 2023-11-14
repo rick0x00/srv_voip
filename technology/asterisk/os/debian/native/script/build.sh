@@ -305,6 +305,19 @@ function start_server () {
     /etc/init.d/asterisk status
 }
 
+function debug_server() {
+    # Debugging Asterisk Server
+
+    # start Asterisk with a control console (-c) and level 5 verbosity (vvvvv).
+    asterisk -cvvvvv
+
+    # restart Asterisk from the shell 
+    asterisk -rx "core restart now"
+
+    # Reconnect to Asterisk CLI
+    asterisk -rvvvvv
+}
+
 # end main functions
 # ============================== #
 # end definition functions
