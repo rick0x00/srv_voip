@@ -193,6 +193,10 @@ function install_server () {
 }
 
 function configure_server () {
+    # configuring simple Asterisk Server
+    # configuring hello world
+    echo "Configuring Hello World on Asterisk"
+
     cd /etc/asterisk
     mkdir samples
     mv *.conf samples/.
