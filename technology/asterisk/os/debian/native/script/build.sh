@@ -42,6 +42,13 @@ expose_ports="${sip_port[0]}/${sip_port[1]}"
 # ============================== #
 # start complement functions
 
+function remove_space_from_beginning_of_line {
+    # Remove a white apace from beginning of line
+    #sed -i 's/^[[:space:]]\+//' "$1"
+    #sed -i 's/^[[:blank:]]\+//' "$1"
+    sed -i 's/^ \+//' "$1"
+}
+
 # end complement functions
 # ============================== #
 # start main functions
@@ -206,88 +213,97 @@ function configure_server () {
     mv *.adsi samples/.
     mv *.timers samples/.
 
-    echo "[transport-udp]
-type = transport
-protocol = udp
-bind = 0.0.0.0
-	
-[6002]
-type = endpoint
-context = from-internal
-disallow = all
-allow = ulaw
-auth = 6002
-aors = 6002
+    echo "
+    [transport-udp]
+    type = transport
+    protocol = udp
+    bind = 0.0.0.0
+        
+    [6002]
+    type = endpoint
+    context = from-internal
+    disallow = all
+    allow = ulaw
+    auth = 6002
+    aors = 6002
 
-[6002]
-type = auth
-auth_type = userpass
-password = 12345678
-username = 6002
+    [6002]
+    type = auth
+    auth_type = userpass
+    password = 12345678
+    username = 6002
 
-[6002]
-type = aor
-max_contacts = 1
+    [6002]
+    type = aor
+    max_contacts = 1
 
-[6001]
-type = endpoint
-context = from-internal
-disallow = all
-allow = ulaw
-auth = 6001
-aors = 6001
+    [6001]
+    type = endpoint
+    context = from-internal
+    disallow = all
+    allow = ulaw
+    auth = 6001
+    aors = 6001
 
-[6001]
-type = auth
-auth_type = userpass
-password = 12345678
-username = 6001
+    [6001]
+    type = auth
+    auth_type = userpass
+    password = 12345678
+    username = 6001
 
-[6001]
-type = aor
-max_contacts = 1
-" > /etc/asterisk/pjsip.conf
+    [6001]
+    type = aor
+    max_contacts = 1
+    " > /etc/asterisk/pjsip.conf
+    remove_space_from_beginning_of_line /etc/asterisk/pjsip.conf
 
-    echo "[modules]
-autoload = yes
-noload => chan_sip.so 
-" > /etc/asterisk/modules.conf
+    echo "
+    [modules]
+    autoload = yes
+    noload => chan_sip.so 
+    " > /etc/asterisk/modules.conf
+    remove_space_from_beginning_of_line /etc/asterisk/modules.conf
 
-    echo "[from-internal]
+    echo "
+    [from-internal]
+    exten = 6002,1,Dial(PJSIP/6002,20)
+    exten = 6001,1,Dial(PJSIP/6001,20)
 
-exten = 6002,1,Dial(PJSIP/6002,20)
-exten = 6001,1,Dial(PJSIP/6001,20)
+    exten = 100,1,Answer()
+    same = n,Wait(1)
+    same = n,Playback(hello-world)
+    same = n,Hangup()
 
-exten = 100,1,Answer()
-same = n,Wait(1)
-same = n,Playback(hello-world)
-same = n,Hangup()
+    exten = 200,1,Answer()
+    same = n,Wait(1)
+    same = n,Playback(tt-monkeysintro)
+    same = n,Wait(5)
+    same = n,Playback(tt-monkeys)
+    same = n,Hangup()
+    " > /etc/asterisk/extensions.conf
+    remove_space_from_beginning_of_line /etc/asterisk/extensions.conf
 
-exten = 200,1,Answer()
-same = n,Wait(1)
-same = n,Playback(tt-monkeysintro)
-same = n,Wait(5)
-same = n,Playback(tt-monkeys)
-same = n,Hangup()
-" > /etc/asterisk/extensions.conf 
 
-    echo '[directories](!)
-astcachedir => /tmp
-astetcdir => /etc/asterisk
-astmoddir => /usr/lib/asterisk/modules
-astvarlibdir => /var/lib/asterisk
-astdbdir => /var/lib/asterisk
-astkeydir => /var/lib/asterisk
-astdatadir => /var/lib/asterisk
-astagidir => /var/lib/asterisk/agi-bin
-astspooldir => /var/spool/asterisk
-astrundir => /var/run/asterisk
-astlogdir => /var/log/asterisk
-astsbindir => /usr/sbin
+    echo '
+    [directories](!)
+    astcachedir => /tmp
+    astetcdir => /etc/asterisk
+    astmoddir => /usr/lib/asterisk/modules
+    astvarlibdir => /var/lib/asterisk
+    astdbdir => /var/lib/asterisk
+    astkeydir => /var/lib/asterisk
+    astdatadir => /var/lib/asterisk
+    astagidir => /var/lib/asterisk/agi-bin
+    astspooldir => /var/spool/asterisk
+    astrundir => /var/run/asterisk
+    astlogdir => /var/log/asterisk
+    astsbindir => /usr/sbin
 
-[options]
-documentation_language = en_US	; Set the language you want documentation
-' > /etc/asterisk/asterisk.conf
+    [options]
+    documentation_language = en_US	; Set the language you want documentation
+    ' > /etc/asterisk/asterisk.conf
+    remove_space_from_beginning_of_line /etc/asterisk/asterisk.conf
+
 
 }
 
