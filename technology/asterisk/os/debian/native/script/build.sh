@@ -49,6 +49,28 @@ function remove_space_from_beginning_of_line {
     sed -i 's/^ \+//' "$1"
 }
 
+function install_generic_tools() {
+    #### start generic tools
+    # install basic network tools
+    apt install -y net-tools iproute2 traceroute iputils-ping mtr
+    # install advanced network tools
+    apt install -y tcpdump nmap netcat
+    # install DNS tools
+    apt install -y dnsutils
+    # install process inspector
+    apt install -y procps htop
+    # install text editors
+    apt install -y nano vim 
+    # install web-content downloader tools
+    apt install -y wget curl
+    # install task scheduler 
+    apt install -y cron
+    # install log register 
+    apt install -y rsyslog
+    #### stop generic tools
+}
+
+
 # end complement functions
 # ============================== #
 # start main functions
@@ -58,7 +80,12 @@ function install_dependencies () {
 }
 
 function install_complements () {
-    apt install -y tcpdump sngrep net-tools vim
+    ###### install tools
+    install_generic_tools
+    #### Start specific tools
+    # install SIP/VoIP inspetor
+    apt install -y sngrep 
+    #### end specific tools
 }
 
 function pre_install_server () {
@@ -154,8 +181,14 @@ function install_asterisk_from_source () {
     cd /usr/local/src/
     cd $(ls | grep -v "tar.gz" | grep "asterisk" | grep [0-9])
     # with User Interface (Interactive)
+    # Select Asterisk Options
     #make menuselect
+    #make menuconfig
     # with CLI (Non Interactive)
+
+    make menuselect.makeopts
+
+    menuselect/menuselect --enable chan_sip menuselect.makeopts
     menuselect/menuselect --enable codec_opus menuselect.makeopts
     menuselect/menuselect --enable EXTRA-SOUNDS-EN-GSM menuselect.makeopts
 
