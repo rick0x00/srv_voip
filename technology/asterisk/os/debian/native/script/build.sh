@@ -199,8 +199,7 @@ function install_server () {
     install_asterisk    
 }
 
-function configure_server () {
-    # configuring simple Asterisk Server
+function configure_asterisk_hello_world() {
     # configuring hello world
     echo "Configuring Hello World on Asterisk"
 
@@ -303,8 +302,16 @@ function configure_server () {
     documentation_language = en_US	; Set the language you want documentation
     ' > /etc/asterisk/asterisk.conf
     remove_space_from_beginning_of_line /etc/asterisk/asterisk.conf
+}
 
+function configure_asterisk() {
+    # configuring simple Asterisk Server
+    configure_asterisk_hello_world
+}
 
+function configure_server () {
+    # configure server
+    configure_asterisk
 }
 
 function start_server () {
