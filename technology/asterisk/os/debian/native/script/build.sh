@@ -26,7 +26,7 @@ fi
 os_distribution="debian"
 os_version=("11" "bullseye")
 
-asterisk_version="16"
+asterisk_version="asterisk-certified-18.9-cert5.tar.gz" # tarball name of file containing last asterisk certified release(https://downloads.asterisk.org/pub/telephony/certified-asterisk/releases/)
 
 itu_country_code="55"
 
@@ -126,9 +126,9 @@ function install_libpri () {
 function download_asterisk_from_source () {
     # Downloading Asterisk
     cd /usr/local/src/
-    wget https://downloads.asterisk.org/pub/telephony/asterisk/asterisk-16-current.tar.gz
+    wget https://downloads.asterisk.org/pub/telephony/certified-asterisk/releases/${asterisk_version}
     # Untarring the Source Asterisk tarballs
-    tar -zxvf asterisk-16-current.tar.gz
+    tar -zxvf ${asterisk_version}
 }
 
 function install_asterisk_from_source () {
