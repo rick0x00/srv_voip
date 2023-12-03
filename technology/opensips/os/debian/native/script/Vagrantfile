@@ -1,0 +1,10 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "debian/bullseye64"
+    config.vm.provider "virtualbox" do |v|
+        v.gui = false
+        v.name = "opensips_lab"
+        v.cpus = 2
+        v.memory = 2048
+    end
+    config.vm.network "public_network", type: "dhcp"
+end
